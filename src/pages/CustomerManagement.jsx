@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const CustomerManagement = () => {
-  const customers = [
+  const initialCustomers = [
     { id: 1001, name: "John Doe", email: "john@example.com", joinDate: "2023-01-15", totalOrders: 12 },
     { id: 1002, name: "Jane Smith", email: "jane@example.com", joinDate: "2023-02-03", totalOrders: 8 },
     { id: 1003, name: "Bob Johnson", email: "bob@example.com", joinDate: "2023-03-21", totalOrders: 5 },
     { id: 1004, name: "Alice Brown", email: "alice@example.com", joinDate: "2023-04-07", totalOrders: 3 },
     { id: 1005, name: "Charlie Davis", email: "charlie@example.com", joinDate: "2023-05-19", totalOrders: 1 },
   ];
+
+  const [customers, setCustomers] = useState(initialCustomers);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const filteredCustomers = initialCustomers.filter(customer => 
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setCustomers(filteredCustomers);
+  }, [searchTerm]);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -45,10 +60,9 @@ const CustomerManagement = () => {
             type="text" 
             placeholder="Search customers..." 
             className="flex-grow mr-2"
+            value={searchTerm}
+            onChange={handleSearch}
           />
-          <Button onClick={() => alert('Search functionality would be implemented here.')}>
-            Search
-          </Button>
         </div>
         
         <Table>
