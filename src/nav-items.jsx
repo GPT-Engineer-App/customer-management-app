@@ -3,6 +3,7 @@ import Index from "./pages/Index.jsx";
 import CustomerManagement from "./pages/CustomerManagement.jsx";
 import CustomerView from "./pages/CustomerView.jsx";
 import CustomerEdit from "./pages/CustomerEdit.jsx";
+import OrderManagement from "./pages/OrderManagement.jsx";
 
 /**
  * Central place for defining the navigation items. Used for navigation components and routing.
@@ -24,7 +25,7 @@ export const navItems = [
     title: "Order Management",
     to: "/orders",
     icon: <ShoppingCart className="h-4 w-4" />,
-    page: <div>Order Management Page</div>,
+    page: <OrderManagement />,
   },
   {
     title: "Customer Management",
