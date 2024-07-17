@@ -1,6 +1,8 @@
 import { Home, Menu, ShoppingCart, Users, BarChart2, Settings } from "lucide-react";
 import Index from "./pages/Index.jsx";
 import CustomerManagement from "./pages/CustomerManagement.jsx";
+import CustomerView from "./pages/CustomerView.jsx";
+import CustomerEdit from "./pages/CustomerEdit.jsx";
 
 /**
  * Central place for defining the navigation items. Used for navigation components and routing.
@@ -29,6 +31,18 @@ export const navItems = [
     to: "/customers",
     icon: <Users className="h-4 w-4" />,
     page: <CustomerManagement />,
+  },
+  {
+    title: "Customer View",
+    to: "/customers/view/:id",
+    icon: <Users className="h-4 w-4" />,
+    page: <CustomerView />,
+  },
+  {
+    title: "Customer Edit",
+    to: "/customers/edit/:id",
+    icon: <Users className="h-4 w-4" />,
+    page: <CustomerEdit />,
   },
   {
     title: "Analytics",

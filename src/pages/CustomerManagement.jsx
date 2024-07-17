@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -116,16 +117,16 @@ const CustomerManagement = () => {
                     variant="outline" 
                     size="sm" 
                     className="mr-2"
-                    onClick={() => alert(`View details for customer ${customer.id}`)}
+                    asChild
                   >
-                    View
+                    <Link to={`/customers/view/${customer.id}`}>View</Link>
                   </Button>
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => alert(`Edit details for customer ${customer.id}`)}
+                    asChild
                   >
-                    Edit
+                    <Link to={`/customers/edit/${customer.id}`}>Edit</Link>
                   </Button>
                 </TableCell>
               </TableRow>
