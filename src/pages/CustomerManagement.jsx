@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 const CustomerManagement = () => {
   const initialCustomers = [
@@ -10,10 +19,19 @@ const CustomerManagement = () => {
     { id: 1003, name: "Bob Johnson", email: "bob@example.com", joinDate: "2023-03-21", totalOrders: 5 },
     { id: 1004, name: "Alice Brown", email: "alice@example.com", joinDate: "2023-04-07", totalOrders: 3 },
     { id: 1005, name: "Charlie Davis", email: "charlie@example.com", joinDate: "2023-05-19", totalOrders: 1 },
+    { id: 1006, name: "Eva Wilson", email: "eva@example.com", joinDate: "2023-06-30", totalOrders: 7 },
+    { id: 1007, name: "Frank Miller", email: "frank@example.com", joinDate: "2023-07-11", totalOrders: 4 },
+    { id: 1008, name: "Grace Lee", email: "grace@example.com", joinDate: "2023-08-22", totalOrders: 6 },
+    { id: 1009, name: "Henry Taylor", email: "henry@example.com", joinDate: "2023-09-14", totalOrders: 2 },
+    { id: 1010, name: "Ivy Clark", email: "ivy@example.com", joinDate: "2023-10-05", totalOrders: 9 },
+    { id: 1011, name: "Jack Robinson", email: "jack@example.com", joinDate: "2023-11-18", totalOrders: 11 },
+    { id: 1012, name: "Karen White", email: "karen@example.com", joinDate: "2023-12-27", totalOrders: 3 },
   ];
 
-  const [customers, setCustomers] = useState(initialCustomers);
+  const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [customersPerPage] = useState(5);
 
   useEffect(() => {
     const filteredCustomers = initialCustomers.filter(customer => 
@@ -21,11 +39,20 @@ const CustomerManagement = () => {
       customer.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setCustomers(filteredCustomers);
+    setCurrentPage(1);
   }, [searchTerm]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  // Get current customers
+  const indexOfLastCustomer = currentPage * customersPerPage;
+  const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
+  const currentCustomers = customers.slice(indexOfFirstCustomer, indexOfLastCustomer);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container mx-auto p-4">
@@ -77,7 +104,7 @@ const CustomerManagement = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {customers.map((customer) => (
+            {currentCustomers.map((customer) => (
               <TableRow key={customer.id}>
                 <TableCell>{customer.id}</TableCell>
                 <TableCell>{customer.name}</TableCell>
@@ -106,15 +133,32 @@ const CustomerManagement = () => {
           </TableBody>
         </Table>
         
-        <div className="flex justify-center mt-4">
-          <Button variant="outline" size="sm" className="mx-1">&laquo;</Button>
-          <Button variant="outline" size="sm" className="mx-1">1</Button>
-          <Button variant="outline" size="sm" className="mx-1">2</Button>
-          <Button variant="outline" size="sm" className="mx-1">3</Button>
-          <Button variant="outline" size="sm" className="mx-1">4</Button>
-          <Button variant="outline" size="sm" className="mx-1">5</Button>
-          <Button variant="outline" size="sm" className="mx-1">&raquo;</Button>
-        </div>
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious 
+                onClick={() => paginate(currentPage - 1)}
+                className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+              />
+            </PaginationItem>
+            {[...Array(Math.ceil(customers.length / customersPerPage)).keys()].map((number) => (
+              <PaginationItem key={number + 1}>
+                <PaginationLink
+                  onClick={() => paginate(number + 1)}
+                  isActive={currentPage === number + 1}
+                >
+                  {number + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext 
+                onClick={() => paginate(currentPage + 1)}
+                className={currentPage === Math.ceil(customers.length / customersPerPage) ? "pointer-events-none opacity-50" : ""}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
